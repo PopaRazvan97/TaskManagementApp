@@ -1,0 +1,101 @@
+﻿<Window x:Class="Tema_2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Tema_2"
+        xmlns:viewModel="clr-namespace:Tema_2.ViewModel"
+        ResizeMode="NoResize"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="720" Width="1280">
+    <Window.Resources>
+        <local:BooleanToStringConverter x:Key="BooleanToStringConverter" />
+        <viewModel:StatisticsViewModel x:Key="StatisticsViewModel"/>
+    </Window.Resources>
+    <StackPanel>
+        <Menu>
+            <MenuItem Header="File">
+                <MenuItem Header="New Database" Click="NewList"/>
+                <MenuItem Header="Open Database" Click="OpenFile"/>
+                <MenuItem Header="Archive Database" Click="ArchiveFile"/>
+                <Separator />
+                <MenuItem Header="Exit" />
+            </MenuItem>
+            <MenuItem Header="TDL">
+                <MenuItem Header="Add Root TDL" Click="AddTDLRoot"/>
+                <MenuItem Header="Add Sub-TDL" Name="AddSubTDL" IsEnabled="False" Click="AddSubTDLOnClick"/>
+                <MenuItem Header="Edit" Name="EditTDL" IsEnabled="False" Click="EditTDLOnClick"/>
+                <MenuItem Header="Delete" Name="DeleteTDL" IsEnabled="False" Click="DeleteTDLOnClick"/>
+                <Separator />
+                <MenuItem Header="Move Up" Click="MoveUpOnClick" />
+                <MenuItem Header="Move Down" Click="MoveDownOnClick" />
+            </MenuItem>
+			<MenuItem Header="Task">
+				<MenuItem Header="Set Done" Click="SetDoneOnClick" IsEnabled="False" Name="SetDoneButton"/>
+				<Separator />
+				<MenuItem Header="Move Up" Click="MoveUpOnClickForTask" IsEnabled="false" Name="MoveUpButton"/>
+				<MenuItem Header="Move Down" Click="MoveDownOnClickForTask" IsEnabled="False" Name="MoveDownButton"/>
+			</MenuItem>
+			<MenuItem Header="Help">
+				<MenuItem Header="About" Command="{Binding AboutCommand}"/>
+            </MenuItem>
+        </Menu>
+        <Grid Background="WhiteSmoke">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="540" />
+                <RowDefinition Height="180" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320" />
+                <ColumnDefinition Width="960" />
+            </Grid.ColumnDefinitions>
+            <TreeView Grid.Row="0" Grid.Column="0" Background="White" Margin="2, 2,3,3"
+                      ItemsSource="{Binding ToDoLists}"
+                      SelectedItemChanged="TreeView_SelectedItemChanged">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Categories}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding ImagePath}" Width="16" Height="16" Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding Name}" FontSize="15"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+			<StackPanel Grid.Row="0" Grid.Column="1" Background="White" Margin="3, 2,2,3">
+				<ListView Grid.Row="0" Grid.Column="1" Margin="2" ItemsSource="{Binding SelectedItem.Tasks}"
+                          SelectionChanged="ListView_SelectionChanged">
+					<ListView.View>
+						<GridView>
+							<GridViewColumn Header="Task Name" Width="auto" DisplayMemberBinding="{Binding Name}" />
+							<GridViewColumn Header="Status" Width="auto">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock
+                                            Text="{Binding Status, Converter={StaticResource BooleanToStringConverter}}" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+							<GridViewColumn Header="Priority" Width="auto" DisplayMemberBinding="{Binding Priority}" />
+							<GridViewColumn Header="Due Date" Width="auto"
+                                            DisplayMemberBinding="{Binding DueDate, StringFormat='dd.MM.yyyy'}" />
+						</GridView>
+					</ListView.View>
+				</ListView>
+			</StackPanel>
+			<StackPanel x:Name="StatisticsPanel" Grid.Row="1" Grid.Column="0" Background="White" Margin="2, 3,3,2">
+                        <!-- DataContext="{StaticResource StatisticsViewModel}"> -->
+                <TextBlock Text="{Binding TasksDueToday}" TextAlignment="Center" FontSize="10" />
+                <TextBlock Text="Tasks due today" TextAlignment="Center" />
+                <TextBlock Text="{Binding TasksDueTomorrow}" TextAlignment="Center" FontSize="10" />
+                <TextBlock Text="Tasks due tomorrow" TextAlignment="Center" />
+                <TextBlock Text="{Binding TasksDone}" TextAlignment="Center" FontSize="10" />
+                <TextBlock Text="Tasks done" TextAlignment="Center" />
+                <TextBlock Text="{Binding TasksToDo}" TextAlignment="Center" FontSize="10" />
+                <TextBlock Text="Tasks to do" TextAlignment="Center" />
+            </StackPanel>
+            <StackPanel x:Name="TaskPanel" Grid.Row="1" Grid.Column="1" Background="White" Margin="3,3,2,2">
+                <TextBlock Text="{Binding SelectedTask.Description}" />
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Window>

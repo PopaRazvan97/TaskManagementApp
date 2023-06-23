@@ -1,0 +1,19 @@
+﻿<Window x:Class="Tema_2.View.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Tema_2.View"
+        mc:Ignorable="d"
+        Title="AboutWindow" Height="50" Width="800">
+    <Grid>
+		<TextBlock Text="       
+                   Name: Popa Razvan Ionut
+				   Group: G213" 
+           FontSize="20" 
+           Foreground="DarkBlue" 
+           TextAlignment="Center"  
+			Background="Beige"
+           />
+	</Grid>
+</Window>
